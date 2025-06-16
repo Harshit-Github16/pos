@@ -40,7 +40,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
           <Image
-            src="/images/logo.png"
+            src="/logo.png"
             alt="Muneem Ji Logo"
             width={150}
             height={150}

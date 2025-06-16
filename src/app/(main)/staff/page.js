@@ -478,7 +478,7 @@ export default function StaffPage() {
           <div className="p-6">
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
               <div className="bg-gray-50 rounded-lg p-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">Today's Attendance</h3>
+                <h3 className="text-lg font-medium text-gray-900 mb-4">Today&apos;s Attendance</h3>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">

@@ -34,7 +34,7 @@ export default function DashboardPage() {
           Namaste, {user?.name}! 👋
         </h1>
         <p className="mt-1 text-gray-600">
-          Welcome to Muneem Ji POS System. Here's your business overview.
+          Welcome to Muneem Ji POS System. Here&apos;s your business overview.
         </p>
       </div>
 
