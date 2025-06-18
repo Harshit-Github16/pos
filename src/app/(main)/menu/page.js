@@ -1,8 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function MenuPage() {
+  return (
+    <RoleGuard requiredPermission="menu">
+      <MenuContent />
+    </RoleGuard>
+  )
+}
+
+function MenuContent() {
   const [activeTab, setActiveTab] = useState('menu_items')
   const [showItemForm, setShowItemForm] = useState(false)
   const [showCategoryForm, setShowCategoryForm] = useState(false)

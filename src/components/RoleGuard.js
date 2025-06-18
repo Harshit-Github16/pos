@@ -4,56 +4,50 @@ import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
-export default function RoleGuard({ children, requiredPermission, fallback = null }) {
+export default function RoleGuard({ children, requiredPermission }) {
   const { user, hasPermission, loading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    if (!loading) {
-      try {
-        if (!user || !hasPermission(requiredPermission)) {
-          // Redirect to dashboard if user doesn't have permission
-          router.push('/dashboard')
-        }
-      } catch (error) {
-        console.error('Error checking permissions:', error)
-        router.push('/dashboard')
-      }
+    if (!loading && !user) {
+      router.push('/login')
     }
-  }, [user, loading, hasPermission, requiredPermission, router])
+  }, [user, loading, router])
 
+  // Show loading while checking authentication
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600"></div>
       </div>
     )
   }
 
-  try {
-    if (!user || !hasPermission(requiredPermission)) {
-      return fallback || (
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="text-6xl mb-4">🚫</div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Access Denied</h2>
-            <p className="text-gray-600">You don't have permission to access this page.</p>
-          </div>
-        </div>
-      )
-    }
-  } catch (error) {
-    console.error('Error in RoleGuard:', error)
+  // Redirect to login if not authenticated
+  if (!user) {
+    return null
+  }
+
+  // Check if user has the required permission
+  if (!hasPermission(requiredPermission)) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="text-6xl mb-4">⚠️</div>
-          <h2 className="text-xl font-semibold text-gray-900 mb-2">Error</h2>
-          <p className="text-gray-600">Something went wrong. Please try again.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600 mb-6">
+            You don&apos;t have permission to access this page.
+          </p>
+          <button
+            onClick={() => router.push('/dashboard')}
+            className="px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700"
+          >
+            Go to Dashboard
+          </button>
         </div>
       </div>
     )
   }
 
+  // User has permission, render the children
   return children
 } 

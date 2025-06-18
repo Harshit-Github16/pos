@@ -3,8 +3,17 @@
 import { useState, useRef } from 'react'
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function BillingPage() {
+  return (
+    <RoleGuard requiredPermission="billing">
+      <BillingContent />
+    </RoleGuard>
+  )
+}
+
+function BillingContent() {
   const [activeTab, setActiveTab] = useState('new_order')
   const [showCustomerForm, setShowCustomerForm] = useState(false)
   const [showPaymentForm, setShowPaymentForm] = useState(false)

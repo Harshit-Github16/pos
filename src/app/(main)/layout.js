@@ -217,7 +217,7 @@ export default function MainLayout({ children }) {
 
       {/* Main Content */}
       <main className=" pt-16 min-h-screen w-full">
-        <div className="p-6 sm:p-8 max-w-7xl mx-auto">
+        <div className="p-6 sm:p-8 max-w-full mx-auto">
           <div className="bg-white rounded-2xl shadow-sm border border-gray-200/60 min-h-[calc(100vh-8rem)]">
             <div className="p-6 sm:p-8">
               {children}

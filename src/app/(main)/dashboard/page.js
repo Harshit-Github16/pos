@@ -1,8 +1,17 @@
 'use client'
 
 import { useAuth } from '@/context/AuthContext'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function DashboardPage() {
+  return (
+    <RoleGuard requiredPermission="dashboard">
+      <DashboardContent />
+    </RoleGuard>
+  )
+}
+
+function DashboardContent() {
   const { user, hasPermission } = useAuth()
 
   const stats = [
@@ -116,12 +125,12 @@ export default function DashboardPage() {
       {quickActions.length > 0 && (
         <div className="bg-white shadow rounded-lg p-4 sm:p-6">
           <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {quickActions.map((action) => (
               <a
                 key={action.name}
                 href={action.href}
-                className={`inline-flex items-center justify-center min-w-[140px] px-4 py-2 rounded-md text-sm font-medium text-white ${action.bgColor} transition-colors`}
+                className={`inline-flex items-center justify-center min-w-[70px] px-4 py-2 rounded-md text-sm font-medium text-white ${action.bgColor} transition-colors`}
               >
                 {action.name}
               </a>
