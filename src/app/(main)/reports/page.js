@@ -2,8 +2,17 @@
 
 import { useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line, CartesianGrid } from 'recharts'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function ReportsPage() {
+  return (
+    <RoleGuard requiredPermission="reports">
+      <ReportsContent />
+    </RoleGuard>
+  )
+}
+
+function ReportsContent() {
   const [activeTab, setActiveTab] = useState('sales')
   const [dateRange, setDateRange] = useState('today')
 

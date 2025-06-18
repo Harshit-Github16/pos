@@ -7,14 +7,49 @@ const AuthContext = createContext({})
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [allUsers, setAllUsers] = useState({})
 
   useEffect(() => {
-    // Check for existing session
+    // Check for existing session and load users
     const checkAuth = async () => {
       try {
         const storedUser = localStorage.getItem('muneem_user')
+        const storedUsers = localStorage.getItem('muneem_users')
+        
         if (storedUser) {
-          setUser(JSON.parse(storedUser))
+          const parsedUser = JSON.parse(storedUser)
+          // Ensure permissions array exists for stored user
+          const userWithPermissions = {
+            ...parsedUser,
+            permissions: parsedUser.permissions || []
+          }
+          setUser(userWithPermissions)
+        }
+        
+        if (storedUsers) {
+          setAllUsers(JSON.parse(storedUsers))
+        } else {
+          // Initialize with default users
+          const defaultUsers = {
+            'harshit123': {
+              id: 1,
+              username: 'harshit123',
+              password: '12345678',
+              role: 'admin',
+              name: 'Harshit',
+              permissions: ['dashboard', 'billing', 'inventory', 'reports', 'menu', 'staff', 'settings']
+            },
+            'receptionist': {
+              id: 2,
+              username: 'receptionist',
+              password: '12345678',
+              role: 'receptionist',
+              name: 'Priya',
+              permissions: ['dashboard', 'billing', 'menu']
+            }
+          }
+          setAllUsers(defaultUsers)
+          localStorage.setItem('muneem_users', JSON.stringify(defaultUsers))
         }
       } catch (error) {
         console.error('Auth check failed:', error)
@@ -27,18 +62,21 @@ export function AuthProvider({ children }) {
   }, [])
 
   const login = async (username, password) => {
-    // Demo login credentials
-    if (username === 'harshit123' && password === '12345678') {
-      const demoUser = {
-        id: 1,
-        username: 'harshit123',
-        role: 'owner',
-        name: 'Harshit'
+    const user = allUsers[username]
+    
+    if (user && user.password === password) {
+      const { password: _, ...userWithoutPassword } = user
+      
+      // Ensure permissions array exists
+      const userWithPermissions = {
+        ...userWithoutPassword,
+        permissions: userWithoutPassword.permissions || []
       }
-      setUser(demoUser)
-      localStorage.setItem('muneem_user', JSON.stringify(demoUser))
+      
+      setUser(userWithPermissions)
+      localStorage.setItem('muneem_user', JSON.stringify(userWithPermissions))
       // Set cookie for middleware
-      document.cookie = `muneem_user=${JSON.stringify(demoUser)}; path=/`
+      document.cookie = `muneem_user=${JSON.stringify(userWithPermissions)}; path=/`
       return { success: true }
     }
     return { success: false, message: 'Invalid credentials' }
@@ -51,8 +89,49 @@ export function AuthProvider({ children }) {
     document.cookie = 'muneem_user=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'
   }
 
+  const hasPermission = (permission) => {
+    if (!user) return false
+    if (!user.permissions || !Array.isArray(user.permissions)) return false
+    return user.permissions.includes(permission)
+  }
+
+  const addReceptionist = (receptionistData) => {
+    const newReceptionist = {
+      id: Date.now(),
+      username: receptionistData.username,
+      password: receptionistData.password,
+      role: 'receptionist',
+      name: receptionistData.name,
+      email: receptionistData.email,
+      phone: receptionistData.phone,
+      permissions: ['dashboard', 'billing', 'menu']
+    }
+
+    const updatedUsers = {
+      ...allUsers,
+      [receptionistData.username]: newReceptionist
+    }
+
+    setAllUsers(updatedUsers)
+    localStorage.setItem('muneem_users', JSON.stringify(updatedUsers))
+    
+    return { success: true, message: 'Receptionist added successfully' }
+  }
+
+  const getAllReceptionists = () => {
+    return Object.values(allUsers).filter(user => user.role === 'receptionist')
+  }
+
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      login, 
+      logout, 
+      loading, 
+      hasPermission, 
+      addReceptionist, 
+      getAllReceptionists 
+    }}>
       {children}
     </AuthContext.Provider>
   )

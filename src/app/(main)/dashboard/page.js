@@ -3,7 +3,7 @@
 import { useAuth } from '@/context/AuthContext'
 
 export default function DashboardPage() {
-  const { user } = useAuth()
+  const { user, hasPermission } = useAuth()
 
   const stats = [
     { name: 'Daily Sales', value: '₹12,500', icon: '💰' },
@@ -26,6 +26,47 @@ export default function DashboardPage() {
     { name: 'Butter Naan', quantity: '100', revenue: '₹5,000' },
   ]
 
+  // Get role-specific quick actions
+  const getQuickActions = () => {
+    const actions = []
+    
+    if (hasPermission('billing')) {
+      actions.push({
+        name: '🧾 New Order',
+        href: '/billing',
+        bgColor: 'bg-orange-600 hover:bg-orange-700'
+      })
+    }
+    
+    if (hasPermission('inventory')) {
+      actions.push({
+        name: '📦 Add Inventory',
+        href: '/inventory',
+        bgColor: 'bg-blue-600 hover:bg-blue-700'
+      })
+    }
+    
+    if (hasPermission('reports')) {
+      actions.push({
+        name: '📊 View Reports',
+        href: '/reports',
+        bgColor: 'bg-green-600 hover:bg-green-700'
+      })
+    }
+    
+    if (hasPermission('menu')) {
+      actions.push({
+        name: '🍽️ Manage Menu',
+        href: '/menu',
+        bgColor: 'bg-purple-600 hover:bg-purple-700'
+      })
+    }
+    
+    return actions
+  }
+
+  const quickActions = getQuickActions()
+
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Welcome Section */}
@@ -36,6 +77,11 @@ export default function DashboardPage() {
         <p className="mt-1 text-sm sm:text-base text-gray-600">
           Welcome to Muneem Ji POS System. Here&apos;s your business overview.
         </p>
+        <div className="mt-2">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+            {user?.role === 'admin' ? 'Administrator' : 'Receptionist'}
+          </span>
+        </div>
       </div>
 
       {/* Stats Grid */}
@@ -67,20 +113,22 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white shadow rounded-lg p-4 sm:p-6">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <button className="inline-flex items-center justify-center min-w-[140px] px-4 py-2 rounded-md text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 transition-colors">
-            🧾 New Order
-          </button>
-          <button className="inline-flex items-center justify-center min-w-[140px] px-4 py-2 rounded-md text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 transition-colors">
-            📦 Add Inventory
-          </button>
-          <button className="inline-flex items-center justify-center min-w-[140px] px-4 py-2 rounded-md text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 transition-colors">
-            📊 View Reports
-          </button>
+      {quickActions.length > 0 && (
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {quickActions.map((action) => (
+              <a
+                key={action.name}
+                href={action.href}
+                className={`inline-flex items-center justify-center min-w-[140px] px-4 py-2 rounded-md text-sm font-medium text-white ${action.bgColor} transition-colors`}
+              >
+                {action.name}
+              </a>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Recent Orders */}
       <div className="bg-white shadow rounded-lg p-4 sm:p-6">
@@ -115,30 +163,32 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Top Selling Items */}
-      <div className="bg-white shadow rounded-lg p-4 sm:p-6">
-        <h2 className="text-lg font-medium text-gray-900 mb-4">Top Selling Items</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity Sold</th>
-                <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {topSellingItems.map((item) => (
-                <tr key={item.name} className="hover:bg-gray-50">
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{item.name}</td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{item.quantity}</td>
-                  <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{item.revenue}</td>
+      {/* Top Selling Items - Only show for admin */}
+      {hasPermission('reports') && (
+        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Top Selling Items</h2>
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity Sold</th>
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {topSellingItems.map((item) => (
+                  <tr key={item.name} className="hover:bg-gray-50">
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{item.name}</td>
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">{item.quantity}</td>
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{item.revenue}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 } 

@@ -1,7 +1,16 @@
 'use client'
 import { useState } from 'react'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function SettingsPage() {
+  return (
+    <RoleGuard requiredPermission="settings">
+      <SettingsContent />
+    </RoleGuard>
+  )
+}
+
+function SettingsContent() {
   const [businessInfo, setBusinessInfo] = useState({
     name: 'Muneem Restaurant',
     address: '123 Main Street, Delhi',

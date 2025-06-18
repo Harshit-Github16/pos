@@ -100,9 +100,17 @@ export default function LoginPage() {
           </div>
 
           <div className="text-center text-xs sm:text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
-            <p className="font-medium mb-1">Demo Credentials:</p>
-            <p>Username: harshit123</p>
-            <p>Password: 12345678</p>
+            <p className="font-medium mb-2">Demo Credentials:</p>
+            <div className="space-y-1">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Admin Account:</span>
+                <span>harshit123 / 12345678</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Receptionist Account:</span>
+                <span>receptionist / 12345678</span>
+              </div>
+            </div>
           </div>
         </form>
       </div>

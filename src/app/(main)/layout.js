@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { useState } from 'react'
 
 export default function MainLayout({ children }) {
-  const { user, logout } = useAuth()
+  const { user, logout, hasPermission } = useAuth()
   const router = useRouter()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -17,50 +17,67 @@ export default function MainLayout({ children }) {
     router.push('/login')
   }
 
-  const navigation = [
+  const allNavigation = [
     { 
       name: 'Dashboard', 
       href: '/dashboard', 
       icon: '📊',
-      description: 'Overview of your business'
+      description: 'Overview of your business',
+      permission: 'dashboard'
     },
     { 
       name: 'Billing', 
       href: '/billing', 
       icon: '🧾',
-      description: 'Create and manage orders'
+      description: 'Create and manage orders',
+      permission: 'billing'
     },
     { 
       name: 'Inventory', 
       href: '/inventory', 
       icon: '📦',
-      description: 'Manage your stock and items'
+      description: 'Manage your stock and items',
+      permission: 'inventory'
     },
     { 
       name: 'Reports', 
       href: '/reports', 
       icon: '📈',
-      description: 'View sales and analytics'
+      description: 'View sales and analytics',
+      permission: 'reports'
     },
     { 
       name: 'Menu', 
       href: '/menu', 
       icon: '🍽️',
-      description: 'Manage your menu items'
+      description: 'Manage your menu items',
+      permission: 'menu'
     },
     { 
       name: 'Staff', 
       href: '/staff', 
       icon: '👥',
-      description: 'Manage staff accounts'
+      description: 'Manage staff accounts',
+      permission: 'staff'
     },
     { 
       name: 'Settings', 
       href: '/settings', 
       icon: '⚙️',
-      description: 'System settings and preferences'
+      description: 'System settings and preferences',
+      permission: 'settings'
     },
   ]
+
+  // Filter navigation based on user permissions
+  const navigation = allNavigation.filter(item => {
+    try {
+      return hasPermission(item.permission)
+    } catch (error) {
+      console.error('Error checking permission for navigation item:', item.name, error)
+      return false
+    }
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex">
@@ -123,7 +140,7 @@ export default function MainLayout({ children }) {
                   <span className="text-sm font-semibold text-gray-900">
                     {user?.name || 'User'}
                   </span>
-                  <span className="text-xs text-gray-500">Administrator</span>
+                  <span className="text-xs text-gray-500 capitalize">{user?.role || 'User'}</span>
                 </div>
               </div>
               <div className="h-6 w-px bg-gray-300 hidden sm:block"></div>

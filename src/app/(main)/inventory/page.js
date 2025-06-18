@@ -1,8 +1,17 @@
 'use client'
 
 import { useState } from 'react'
+import RoleGuard from '@/components/RoleGuard'
 
 export default function InventoryPage() {
+  return (
+    <RoleGuard requiredPermission="inventory">
+      <InventoryContent />
+    </RoleGuard>
+  )
+}
+
+function InventoryContent() {
   const [activeTab, setActiveTab] = useState('items')
   const [showItemForm, setShowItemForm] = useState(false)
   const [showCategoryForm, setShowCategoryForm] = useState(false)
