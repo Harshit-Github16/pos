@@ -15,6 +15,8 @@ export default function ReportsPage() {
 
 function ReportsContent() {
   const { user } = useAuth()
+  const [activeTab, setActiveTab] = useState('sales')
+  const [dateRange, setDateRange] = useState('today')
   if (user?.username === 'menuuser') {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -25,9 +27,6 @@ function ReportsContent() {
       </div>
     )
   }
-
-  const [activeTab, setActiveTab] = useState('sales')
-  const [dateRange, setDateRange] = useState('today')
 
   const tabs = [
     { id: 'sales', name: 'Sales Reports', icon: '💰' },

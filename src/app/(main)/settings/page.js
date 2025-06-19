@@ -13,16 +13,6 @@ export default function SettingsPage() {
 
 function SettingsContent() {
   const { user } = useAuth()
-  if (user?.username === 'menuuser') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You do not have access to this page.</p>
-        </div>
-      </div>
-    )
-  }
   const [businessInfo, setBusinessInfo] = useState({
     name: 'Muneem Restaurant',
     address: '123 Main Street, Delhi',
@@ -45,6 +35,16 @@ function SettingsContent() {
     notifications: true,
     language: 'English',
   })
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-8 max-w-2xl mx-auto py-8">

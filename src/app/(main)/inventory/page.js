@@ -14,6 +14,10 @@ export default function InventoryPage() {
 
 function InventoryContent() {
   const { user } = useAuth()
+  const [activeTab, setActiveTab] = useState('items')
+  const [showItemForm, setShowItemForm] = useState(false)
+  const [showCategoryForm, setShowCategoryForm] = useState(false)
+  const [showSupplierForm, setShowSupplierForm] = useState(false)
   if (user?.username === 'menuuser') {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -24,10 +28,6 @@ function InventoryContent() {
       </div>
     )
   }
-  const [activeTab, setActiveTab] = useState('items')
-  const [showItemForm, setShowItemForm] = useState(false)
-  const [showCategoryForm, setShowCategoryForm] = useState(false)
-  const [showSupplierForm, setShowSupplierForm] = useState(false)
 
   const tabs = [
     { id: 'items', name: 'Items', icon: '📦' },
