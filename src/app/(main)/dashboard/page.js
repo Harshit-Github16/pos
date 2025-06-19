@@ -121,23 +121,7 @@ function DashboardContent() {
         ))}
       </div>
 
-      {/* Quick Actions */}
-      {quickActions.length > 0 && (
-        <div className="bg-white shadow rounded-lg p-4 sm:p-6">
-          <h2 className="text-lg font-medium text-gray-900 mb-4">Quick Actions</h2>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {quickActions.map((action) => (
-              <a
-                key={action.name}
-                href={action.href}
-                className={`inline-flex items-center justify-center min-w-[70px] px-4 py-2 rounded-md text-sm font-medium text-white ${action.bgColor} transition-colors`}
-              >
-                {action.name}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
+    
 
       {/* Recent Orders */}
       <div className="bg-white shadow rounded-lg p-4 sm:p-6">
