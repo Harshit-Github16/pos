@@ -13,7 +13,7 @@ export default function StaffPage() {
 }
 
 function StaffContent() {
-  const { addReceptionist, getAllReceptionists } = useAuth()
+  const { addReceptionist, getAllReceptionists, user } = useAuth()
   const [activeTab, setActiveTab] = useState('staff')
   const [showStaffForm, setShowStaffForm] = useState(false)
   const [showRoleForm, setShowRoleForm] = useState(false)
@@ -422,6 +422,17 @@ function StaffContent() {
       </div>
     </div>
   )
+
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">

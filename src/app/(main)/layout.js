@@ -140,7 +140,7 @@ export default function MainLayout({ children }) {
                   <span className="text-sm font-semibold text-gray-900">
                     {user?.name || 'User'}
                   </span>
-                  <span className="text-xs text-gray-500 capitalize">{user?.role || 'User'}</span>
+                  <span className="text-xs text-gray-500 capitalize">{user?.username === 'menuuser' ? 'Menu User' : (user?.role || 'User')}</span>
                 </div>
               </div>
               <div className="h-6 w-px bg-gray-300 hidden sm:block"></div>
@@ -205,12 +205,14 @@ export default function MainLayout({ children }) {
           
           {/* Footer section */}
           <div className="mt-auto pt-6 border-t border-gray-200">
-            <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-xs font-medium text-gray-600">System Online</span>
+            {user?.role === 'admin' && (
+              <div className="px-4 py-3 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                <div className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs font-medium text-gray-600">System Online</span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </aside>

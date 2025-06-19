@@ -22,8 +22,12 @@ export default function LoginPage() {
     try {
       const result = await login(username, password)
       if (result.success) {
-        
-        router.push('/dashboard')
+        const user = JSON.parse(localStorage.getItem('muneem_user'))
+        if (user?.username === 'menuuser') {
+          router.push('/menu')
+        } else {
+          router.push('/dashboard')
+        }
       } else {
         setError(result.message)
       }
@@ -109,6 +113,10 @@ export default function LoginPage() {
               <div className="flex justify-between items-center">
                 <span className="font-medium">Receptionist Account:</span>
                 <span>receptionist / 12345678</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Menu User:</span>
+                <span>menuuser / 12345678</span>
               </div>
             </div>
           </div>

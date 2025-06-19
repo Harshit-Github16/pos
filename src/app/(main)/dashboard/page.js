@@ -13,6 +13,26 @@ export default function DashboardPage() {
 
 function DashboardContent() {
   const { user, hasPermission } = useAuth()
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="relative min-h-screen flex items-center justify-center bg-orange-50 overflow-hidden">
+        <div className="absolute inset-0 opacity-20 z-0 flex items-center justify-center">
+          <img src="/public/globe.svg" alt="Food Background" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative z-10 flex flex-col items-center justify-center p-8 bg-white bg-opacity-80 rounded-xl shadow-lg">
+          <img src="/logo.png" alt="Logo" className="w-24 h-24 mb-4 rounded-full shadow" />
+          <h1 className="text-3xl font-bold text-orange-700 mb-2">Welcome to Muneem Ji Restaurant</h1>
+          <p className="text-lg text-gray-700 mb-6 font-semibold">Deliciousness Delivered</p>
+          <button
+            onClick={() => window.location.href = '/menu'}
+            className="px-6 py-3 bg-orange-600 text-white rounded-lg text-lg font-semibold shadow hover:bg-orange-700 transition"
+          >
+            Order Food
+          </button>
+        </div>
+      </div>
+    )
+  }
 
   const stats = [
     { name: 'Daily Sales', value: '₹12,500', icon: '💰' },

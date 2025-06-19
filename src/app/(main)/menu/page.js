@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import RoleGuard from '@/components/RoleGuard'
+import { useAuth } from '@/context/AuthContext'
 
 export default function MenuPage() {
   return (
@@ -12,9 +13,19 @@ export default function MenuPage() {
 }
 
 function MenuContent() {
+  const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('menu_items')
   const [showItemForm, setShowItemForm] = useState(false)
   const [showCategoryForm, setShowCategoryForm] = useState(false)
+  const [editMenuItem, setEditMenuItem] = useState(null)
+  const [showEditMenuItemForm, setShowEditMenuItemForm] = useState(false)
+  const [menuList, setMenuList] = useState([
+    { id: 'M001', name: 'Butter Chicken', category: 'Main Course', price: 450, prepTime: '20 min', available: true, online: true, dineIn: true, description: 'Rich creamy chicken curry.' },
+    { id: 'M002', name: 'Paneer Butter Masala', category: 'Main Course', price: 350, prepTime: '18 min', available: true, online: true, dineIn: true, description: 'Paneer in buttery tomato gravy.' },
+    { id: 'M003', name: 'Veg Biryani', category: 'Rice', price: 250, prepTime: '15 min', available: true, online: false, dineIn: true, description: 'Aromatic rice with veggies.' },
+    { id: 'M004', name: 'Butter Naan', category: 'Breads', price: 50, prepTime: '5 min', available: true, online: true, dineIn: true, description: 'Soft naan with butter.' },
+    { id: 'M005', name: 'Masala Chai', category: 'Beverages', price: 30, prepTime: '3 min', available: true, online: false, dineIn: true, description: 'Spiced Indian tea.' },
+  ])
 
   const tabs = [
     { id: 'menu_items', name: 'Menu Items', icon: '🍽️' },
@@ -23,14 +34,6 @@ function MenuContent() {
     { id: 'modifiers', name: 'Modifiers', icon: '🧂' },
   ]
 
-  // Dummy data
-  const menuItems = [
-    { id: 'M001', name: 'Butter Chicken', category: 'Main Course', price: 450, prepTime: '20 min', available: true, online: true, dineIn: true, description: 'Rich creamy chicken curry.' },
-    { id: 'M002', name: 'Paneer Butter Masala', category: 'Main Course', price: 350, prepTime: '18 min', available: true, online: true, dineIn: true, description: 'Paneer in buttery tomato gravy.' },
-    { id: 'M003', name: 'Veg Biryani', category: 'Rice', price: 250, prepTime: '15 min', available: true, online: false, dineIn: true, description: 'Aromatic rice with veggies.' },
-    { id: 'M004', name: 'Butter Naan', category: 'Breads', price: 50, prepTime: '5 min', available: true, online: true, dineIn: true, description: 'Soft naan with butter.' },
-    { id: 'M005', name: 'Masala Chai', category: 'Beverages', price: 30, prepTime: '3 min', available: true, online: false, dineIn: true, description: 'Spiced Indian tea.' },
-  ]
   const categories = [
     { id: 'C001', name: 'Main Course', description: 'Curries and gravies.', displayOrder: 1 },
     { id: 'C002', name: 'Rice', description: 'Rice-based dishes.', displayOrder: 2 },
@@ -46,6 +49,15 @@ function MenuContent() {
     { id: 'MOD002', name: 'No Onion', description: 'Remove onion.' },
     { id: 'MOD003', name: 'Extra Cheese', description: 'Add cheese.' },
   ]
+
+  const handleEditMenuItem = (item) => {
+    setEditMenuItem(item)
+    setShowEditMenuItemForm(true)
+  }
+
+  const handleDeleteMenuItem = (itemId) => {
+    setMenuList((prev) => prev.filter((i) => i.id !== itemId))
+  }
 
   const AddMenuItemForm = () => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
@@ -212,15 +224,41 @@ function MenuContent() {
     </div>
   )
 
+  const EditMenuItemForm = () => (
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-md w-full p-4">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Edit Menu Item</h3>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Item Name</label>
+            <input
+              type="text"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
+              value={editMenuItem?.name || ''}
+              onChange={e => setEditMenuItem({ ...editMenuItem, name: e.target.value })}
+            />
+          </div>
+          <div className="flex justify-end space-x-3">
+            <button type="button" onClick={() => setShowEditMenuItemForm(false)} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
+            <button type="button" onClick={() => {
+              setMenuList(menuList.map(i => i.id === editMenuItem.id ? editMenuItem : i))
+              setShowEditMenuItemForm(false)
+            }} className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+
   return (
     <div className="space-y-4 sm:space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <h1 className="text-xl sm:text-2xl font-semibold text-gray-900">Menu</h1>
         <div className="flex items-center space-x-2 sm:space-x-4">
-          {activeTab === 'menu_items' && (
+          {activeTab === 'menu_items' && (user?.role === 'admin' || user?.role === 'receptionist') && (
             <button onClick={() => setShowItemForm(true)} className="px-3 sm:px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 transition-colors">Add Menu Item</button>
           )}
-          {activeTab === 'categories' && (
+          {activeTab === 'categories' && (user?.role === 'admin' || user?.role === 'receptionist') && (
             <button onClick={() => setShowCategoryForm(true)} className="px-3 sm:px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700 transition-colors">Add Category</button>
           )}
         </div>
@@ -248,10 +286,11 @@ function MenuContent() {
                   <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Online</th>
                   <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden lg:table-cell">Dine-In</th>
                   <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider hidden xl:table-cell">Description</th>
+                  <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {menuItems.map((item) => (
+                {menuList.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">{item.name}</td>
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden sm:table-cell">{item.category}</td>
@@ -261,6 +300,14 @@ function MenuContent() {
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 hidden lg:table-cell">{item.online ? 'Yes' : 'No'}</td>
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900 hidden lg:table-cell">{item.dineIn ? 'Yes' : 'No'}</td>
                     <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500 hidden xl:table-cell">{item.description}</td>
+                    <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-2">
+                      {(user?.role === 'admin' || user?.role === 'receptionist') && (
+                        <>
+                          <button onClick={() => handleEditMenuItem(item)} className="text-blue-600 hover:text-blue-900">Edit</button>
+                          <button onClick={() => handleDeleteMenuItem(item.id)} className="text-red-600 hover:text-red-900">Delete</button>
+                        </>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -335,8 +382,9 @@ function MenuContent() {
         )}
       </div>
       {/* Forms */}
-      {showItemForm && <AddMenuItemForm />}
-      {showCategoryForm && <AddCategoryForm />}
+      {showItemForm && (user?.role === 'admin' || user?.role === 'receptionist') && <AddMenuItemForm />}
+      {showCategoryForm && (user?.role === 'admin' || user?.role === 'receptionist') && <AddCategoryForm />}
+      {showEditMenuItemForm && (user?.role === 'admin' || user?.role === 'receptionist') && <EditMenuItemForm />}
     </div>
   )
 } 

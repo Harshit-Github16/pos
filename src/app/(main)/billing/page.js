@@ -5,6 +5,51 @@ import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
 import RoleGuard from '@/components/RoleGuard'
 
+// Dummy data for order history
+const orderHistory = [
+  {
+    id: 'ORD004',
+    customer: 'Neha Singh',
+    items: [
+      { name: 'Chicken Biryani', quantity: 2, price: '₹600' },
+      { name: 'Coke', quantity: 2, price: '₹100' },
+    ],
+    total: '₹800',
+    status: 'Completed',
+    time: '1:45 PM',
+    date: '2024-02-20',
+    payment: 'Card',
+  },
+  {
+    id: 'ORD005',
+    customer: 'Vikram Mehta',
+    items: [
+      { name: 'Veg Thali', quantity: 1, price: '₹250' },
+      { name: 'Masala Dosa', quantity: 1, price: '₹180' },
+      { name: 'Masala Chai', quantity: 2, price: '₹60' },
+    ],
+    total: '₹550',
+    status: 'Completed',
+    time: '1:30 PM',
+    date: '2024-02-20',
+    payment: 'Cash',
+  },
+  {
+    id: 'ORD006',
+    customer: 'Rajesh Kumar',
+    items: [
+      { name: 'Butter Chicken', quantity: 1, price: '₹450' },
+      { name: 'Butter Naan', quantity: 2, price: '₹100' },
+      { name: 'Lassi', quantity: 1, price: '₹80' },
+    ],
+    total: '₹710',
+    status: 'Completed',
+    time: '1:15 PM',
+    date: '2024-02-20',
+    payment: 'UPI',
+  },
+]
+
 export default function BillingPage() {
   return (
     <RoleGuard requiredPermission="billing">
@@ -21,6 +66,20 @@ function BillingContent() {
   const [showBillPreview, setShowBillPreview] = useState(false)
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const billRef = useRef(null)
+  const [editOrder, setEditOrder] = useState(null)
+  const [showEditOrderForm, setShowEditOrderForm] = useState(false)
+  const [orders, setOrders] = useState(orderHistory)
+  const { user } = require('@/context/AuthContext').useAuth();
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
 
   // Business information for the bill
   const businessInfo = {
@@ -276,51 +335,6 @@ function BillingContent() {
     },
   ]
 
-  // Dummy data for order history
-  const orderHistory = [
-    {
-      id: 'ORD004',
-      customer: 'Neha Singh',
-      items: [
-        { name: 'Chicken Biryani', quantity: 2, price: '₹600' },
-        { name: 'Coke', quantity: 2, price: '₹100' },
-      ],
-      total: '₹800',
-      status: 'Completed',
-      time: '1:45 PM',
-      date: '2024-02-20',
-      payment: 'Card',
-    },
-    {
-      id: 'ORD005',
-      customer: 'Vikram Mehta',
-      items: [
-        { name: 'Veg Thali', quantity: 1, price: '₹250' },
-        { name: 'Masala Dosa', quantity: 1, price: '₹180' },
-        { name: 'Masala Chai', quantity: 2, price: '₹60' },
-      ],
-      total: '₹550',
-      status: 'Completed',
-      time: '1:30 PM',
-      date: '2024-02-20',
-      payment: 'Cash',
-    },
-    {
-      id: 'ORD006',
-      customer: 'Rajesh Kumar',
-      items: [
-        { name: 'Butter Chicken', quantity: 1, price: '₹450' },
-        { name: 'Butter Naan', quantity: 2, price: '₹100' },
-        { name: 'Lassi', quantity: 1, price: '₹80' },
-      ],
-      total: '₹710',
-      status: 'Completed',
-      time: '1:15 PM',
-      date: '2024-02-20',
-      payment: 'UPI',
-    },
-  ]
-
   // Dummy data for customers
   const customers = [
     {
@@ -499,6 +513,41 @@ function BillingContent() {
             >
               Complete Payment
             </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+
+  const handleEditOrder = (order) => {
+    setEditOrder(order)
+    setShowEditOrderForm(true)
+  }
+
+  const handleDeleteOrder = (orderId) => {
+    setOrders((prev) => prev.filter((o) => o.id !== orderId))
+  }
+
+  const EditOrderForm = () => (
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-md w-full p-4">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Edit Order</h3>
+        <form className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Customer</label>
+            <input
+              type="text"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900"
+              value={editOrder?.customer || ''}
+              onChange={e => setEditOrder({ ...editOrder, customer: e.target.value })}
+            />
+          </div>
+          <div className="flex justify-end space-x-3">
+            <button type="button" onClick={() => setShowEditOrderForm(false)} className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">Cancel</button>
+            <button type="button" onClick={() => {
+              setOrders(orders.map(o => o.id === editOrder.id ? editOrder : o))
+              setShowEditOrderForm(false)
+            }} className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700">Save</button>
           </div>
         </form>
       </div>
@@ -741,7 +790,7 @@ function BillingContent() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {orderHistory.map((order) => (
+                  {orders.map((order) => (
                     <tr key={order.id} className="hover:bg-gray-50">
                       <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
                         {order.id}
@@ -766,7 +815,9 @@ function BillingContent() {
                           {order.status}
                         </span>
                       </td>
-                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium">
+                      <td className="px-3 sm:px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium space-x-2">
+                        <button onClick={() => handleEditOrder(order)} className="text-blue-600 hover:text-blue-900">Edit</button>
+                        <button onClick={() => handleDeleteOrder(order.id)} className="text-red-600 hover:text-red-900">Delete</button>
                         <button
                           onClick={() => {
                             setSelectedOrder(order)
@@ -864,6 +915,7 @@ function BillingContent() {
       {showCustomerForm && <AddCustomerForm />}
       {showPaymentForm && <PaymentForm />}
       {showBillPreview && <BillPreview order={selectedOrder} />}
+      {showEditOrderForm && <EditOrderForm />}
     </div>
   )
 } 

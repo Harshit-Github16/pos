@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import RoleGuard from '@/components/RoleGuard'
+import { useAuth } from '@/context/AuthContext'
 
 export default function SettingsPage() {
   return (
@@ -11,6 +12,17 @@ export default function SettingsPage() {
 }
 
 function SettingsContent() {
+  const { user } = useAuth()
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
   const [businessInfo, setBusinessInfo] = useState({
     name: 'Muneem Restaurant',
     address: '123 Main Street, Delhi',

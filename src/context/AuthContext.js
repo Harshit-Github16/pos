@@ -46,6 +46,14 @@ export function AuthProvider({ children }) {
               role: 'receptionist',
               name: 'Priya',
               permissions: ['dashboard', 'billing',]
+            },
+            'menuuser': {
+              id: 3,
+              username: 'menuuser',
+              password: '12345678',
+              role: 'user',
+              name: 'Menu User',
+              permissions: ['menu']
             }
           }
           setAllUsers(defaultUsers)

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line, CartesianGrid } from 'recharts'
 import RoleGuard from '@/components/RoleGuard'
+import { useAuth } from '@/context/AuthContext'
 
 export default function ReportsPage() {
   return (
@@ -13,6 +14,18 @@ export default function ReportsPage() {
 }
 
 function ReportsContent() {
+  const { user } = useAuth()
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
+
   const [activeTab, setActiveTab] = useState('sales')
   const [dateRange, setDateRange] = useState('today')
 
