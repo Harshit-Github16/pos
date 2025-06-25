@@ -10,55 +10,51 @@ export function AuthProvider({ children }) {
   const [allUsers, setAllUsers] = useState({})
 
   useEffect(() => {
-    // Check for existing session and load users
     const checkAuth = async () => {
       try {
-        const storedUser = localStorage.getItem('muneem_user')
-        const storedUsers = localStorage.getItem('muneem_users')
+        const defaultUsers = {
+          'harshit123': {
+            id: 1,
+            username: 'harshit123',
+            password: '12345678',
+            role: 'admin',
+            name: 'Harshit',
+            permissions: ['dashboard', 'billing', 'inventory', 'reports', 'menu', 'staff', 'settings']
+          },
+          'receptionist': {
+            id: 2,
+            username: 'receptionist',
+            password: '12345678',
+            role: 'receptionist',
+            name: 'Priya',
+            permissions: ['dashboard', 'billing',]
+          },
+          'menuuser': {
+            id: 3,
+            username: 'menuuser',
+            password: '12345678',
+            role: 'user',
+            name: 'Menu User',
+            permissions: ['menu']
+          }
+        };
         
+        const storedUser = localStorage.getItem('muneem_user')
         if (storedUser) {
           const parsedUser = JSON.parse(storedUser)
-          // Ensure permissions array exists for stored user
-          const userWithPermissions = {
-            ...parsedUser,
-            permissions: parsedUser.permissions || []
-          }
-          setUser(userWithPermissions)
+          setUser({ ...parsedUser, permissions: parsedUser.permissions || [] })
         }
         
+        const storedUsers = localStorage.getItem('muneem_users')
+        let finalUsers = { ...defaultUsers }
         if (storedUsers) {
-          setAllUsers(JSON.parse(storedUsers))
-        } else {
-          // Initialize with default users
-          const defaultUsers = {
-            'harshit123': {
-              id: 1,
-              username: 'harshit123',
-              password: '12345678',
-              role: 'admin',
-              name: 'Harshit',
-              permissions: ['dashboard', 'billing', 'inventory', 'reports', 'menu', 'staff', 'settings']
-            },
-            'receptionist': {
-              id: 2,
-              username: 'receptionist',
-              password: '12345678',
-              role: 'receptionist',
-              name: 'Priya',
-              permissions: ['dashboard', 'billing',]
-            },
-            'menuuser': {
-              id: 3,
-              username: 'menuuser',
-              password: '12345678',
-              role: 'user',
-              name: 'Menu User',
-              permissions: ['menu']
-            }
-          }
-          setAllUsers(defaultUsers)
-          localStorage.setItem('muneem_users', JSON.stringify(defaultUsers))
+          const parsedStoredUsers = JSON.parse(storedUsers)
+          finalUsers = { ...defaultUsers, ...parsedStoredUsers }
         }
+        
+        setAllUsers(finalUsers)
+        localStorage.setItem('muneem_users', JSON.stringify(finalUsers))
+
       } catch (error) {
         console.error('Auth check failed:', error)
       } finally {
@@ -112,7 +108,7 @@ export function AuthProvider({ children }) {
       name: receptionistData.name,
       email: receptionistData.email,
       phone: receptionistData.phone,
-      permissions: ['dashboard', 'billing', 'menu']
+      permissions: ['dashboard', 'billing', 'menu', 'inventory', 'reports', 'staff', 'settings']
     }
 
     const updatedUsers = {

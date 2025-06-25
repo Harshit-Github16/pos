@@ -1,9 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend, LineChart, Line, CartesianGrid } from 'recharts'
 import RoleGuard from '@/components/RoleGuard'
 import { useAuth } from '@/context/AuthContext'
+import jsPDF from 'jspdf'
+import html2canvas from 'html2canvas'
 
 export default function ReportsPage() {
   return (
@@ -17,6 +19,30 @@ function ReportsContent() {
   const { user } = useAuth()
   const [activeTab, setActiveTab] = useState('sales')
   const [dateRange, setDateRange] = useState('today')
+  const reportContentRef = useRef(null)
+
+  const handleExport = () => {
+    if (reportContentRef.current) {
+      const reportName = tabs.find(t => t.id === activeTab)?.name || 'Report'
+      const fileName = `${reportName.replace(/ /g, '_')}_${dateRange}_${new Date().toISOString().split('T')[0]}.pdf`
+
+      html2canvas(reportContentRef.current, {
+        scale: 2, // Higher scale for better quality
+        useCORS: true,
+        logging: false,
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png')
+        const pdf = new jsPDF({
+          orientation: 'portrait',
+          unit: 'px',
+          format: [canvas.width, canvas.height]
+        });
+        pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height)
+        pdf.save(fileName)
+      });
+    }
+  }
+
   if (user?.username === 'menuuser') {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -51,11 +77,6 @@ function ReportsContent() {
     totalOrders: '156',
     averageOrderValue: '₹290',
     totalCustomers: '89',
-    salesByCategory: [
-      { category: 'Food', amount: '₹28,500', percentage: 63 },
-      { category: 'Beverages', amount: '₹12,750', percentage: 28 },
-      { category: 'Desserts', amount: '₹4,000', percentage: 9 },
-    ],
     topSellingItems: [
       { name: 'Butter Chicken', quantity: 45, revenue: '₹13,500' },
       { name: 'Veg Biryani', quantity: 38, revenue: '₹9,500' },
@@ -70,15 +91,14 @@ function ReportsContent() {
       { id: 'ORD004', customer: 'Neha Singh', amount: '₹1,500', status: 'Processing', time: '1:45 PM' },
       { id: 'ORD005', customer: 'Vikram Mehta', amount: '₹950', status: 'Processing', time: '1:30 PM' },
     ],
-    hourlySales: [
-      { hour: '10 AM', sales: '₹4,500' },
-      { hour: '11 AM', sales: '₹5,800' },
-      { hour: '12 PM', sales: '₹8,200' },
-      { hour: '1 PM', sales: '₹7,500' },
-      { hour: '2 PM', sales: '₹6,300' },
-      { hour: '3 PM', sales: '₹4,800' },
-      { hour: '4 PM', sales: '₹3,900' },
-      { hour: '5 PM', sales: '₹4,650' },
+    weeklySales: [
+      { day: 'Mon', sales: 42000 },
+      { day: 'Tue', sales: 45000 },
+      { day: 'Wed', sales: 48000 },
+      { day: 'Thu', sales: 51000 },
+      { day: 'Fri', sales: 55000 },
+      { day: 'Sat', sales: 62000 },
+      { day: 'Sun', sales: 58000 },
     ],
   }
 
@@ -175,7 +195,7 @@ function ReportsContent() {
               </option>
             ))}
           </select>
-          <button className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700">
+          <button onClick={handleExport} className="px-4 py-2 text-sm font-medium text-white bg-orange-600 rounded-md hover:bg-orange-700">
             Export Report
           </button>
         </div>
@@ -202,7 +222,7 @@ function ReportsContent() {
       </div>
 
       {/* Content based on active tab */}
-      <div className="space-y-6">
+      <div ref={reportContentRef} className="space-y-6">
         {activeTab === 'sales' && (
           <>
             {/* Summary Cards */}
@@ -229,43 +249,19 @@ function ReportsContent() {
               </div>
             </div>
 
-            {/* Sales by Category Pie Chart */}
+            {/* Weekly Sales Chart */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Sales by Category</h3>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Weekly Sales</h3>
               <div className="w-full h-72">
                 <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={salesSummary.salesByCategory}
-                      dataKey="percentage"
-                      nameKey="category"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={90}
-                      label={({ category, percentage }) => `${category} (${percentage}%)`}
-                    >
-                      {salesSummary.salesByCategory.map((entry, idx) => (
-                        <Cell key={`cell-${idx}`} fill={COLORS[idx % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
-            </div>
-
-            {/* Hourly Sales Bar Chart */}
-            <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Hourly Sales</h3>
-              <div className="w-full h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={salesSummary.hourlySales.map(h => ({ ...h, sales: parseInt(h.sales.replace('₹', '').replace(/,/g, '')) }))}>
-                    <XAxis dataKey="hour" />
+                  <LineChart data={salesSummary.weeklySales}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="day" />
                     <YAxis />
                     <Tooltip />
-                    <Bar dataKey="sales" fill="#f97316" radius={[6, 6, 0, 0]} />
-                  </BarChart>
+                    <Legend />
+                    <Line type="monotone" dataKey="sales" stroke="#f97316" activeDot={{ r: 8 }} />
+                  </LineChart>
                 </ResponsiveContainer>
               </div>
             </div>
@@ -393,18 +389,38 @@ function ReportsContent() {
               </div>
             </div>
 
-            {/* Recent Stock Movements Bar Chart */}
+            {/* Recent Stock Movements Table */}
             <div className="bg-white rounded-lg shadow p-6">
               <h3 className="text-lg font-medium text-gray-900 mb-4">Recent Stock Movements</h3>
-              <div className="w-full h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={inventorySummary.recentStockMovements}>
-                    <XAxis dataKey="item" />
-                    <YAxis />
-                    <Tooltip />
-                    <Bar dataKey="quantity" fill="#60a5fa" barSize={32} />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {inventorySummary.recentStockMovements.map((movement, idx) => (
+                      <tr key={idx}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{movement.item}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm">
+                          <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            movement.type === 'Received' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                          }`}>
+                            {movement.type}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{movement.quantity}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{movement.date}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{movement.time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
           </>
@@ -458,18 +474,30 @@ function ReportsContent() {
               </div>
             </div>
 
-            {/* Top Customers Bar Chart */}
+            {/* Top Customers Table */}
             <div className="bg-white rounded-lg shadow p-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-4">Top Customers</h3>
-              <div className="w-full h-72">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={customerSummary.topCustomers} layout="vertical">
-                    <XAxis type="number" />
-                    <YAxis dataKey="name" type="category" width={120} />
-                    <Tooltip />
-                    <Bar dataKey="orders" fill="#fbbf24" barSize={24} />
-                  </BarChart>
-                </ResponsiveContainer>
+              <h3 className="text-lg font-medium text-gray-900 mb-4">Top Customers by Spending</h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total Spent</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Order</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {customerSummary.topCustomers.map((customer) => (
+                      <tr key={customer.name}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{customer.name}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{customer.orders}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">{customer.totalSpent}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{customer.lastOrder}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
