@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import RoleGuard from '@/components/RoleGuard'
 import { useAuth } from '@/context/AuthContext'
+import { FiShoppingCart, FiPlus, FiMinus, FiTrash2 } from 'react-icons/fi'
+import Image from 'next/image'
 
 function EditIcon() {
   return (
@@ -21,7 +23,190 @@ function DeleteIcon() {
   )
 }
 
+const DEMO_CATEGORIES = [
+  {
+    id: 'pizza',
+    name: 'Pizza',
+    image: '/pizza.jpeg',
+    items: [
+      { id: 'p1', name: 'Margherita', description: 'Classic cheese & tomato', price: 299, image: '/pizza.jpeg' },
+      { id: 'p2', name: 'Farmhouse', description: 'Veggies & cheese', price: 399, image: '/pizza.jpeg' },
+      { id: 'p3', name: 'Peppy Paneer', description: 'Spicy paneer & capsicum', price: 349, image: '/pizza.jpeg' },
+    ],
+  },
+  {
+    id: 'drinks',
+    name: 'Drinks',
+    image: '/drinks.jpg',
+    items: [
+      { id: 'd1', name: 'Red Cooler', description: 'Chilled berry drink', price: 129, image: '/drinks.jpg' },
+      { id: 'd2', name: 'Iced Tea', description: 'Refreshing lemon iced tea', price: 99, image: '/drinks.jpg' },
+      { id: 'd3', name: 'Lassi', description: 'Cool yogurt drink', price: 79, image: '/drinks.jpg' },
+    ],
+  },
+  {
+    id: 'dessert',
+    name: 'Dessert',
+    image: '/dessert.jpg',
+    items: [
+      { id: 'a3', name: 'Cookie Skillet', description: 'Warm cookie with ice cream', price: 249, image: '/dessert.jpg' },
+      { id: 'a2', name: 'Choco Lava Cake', description: 'Rich chocolate cake', price: 129, image: '/dessert.jpg' },
+      { id: 'a1', name: 'Choco Lava Cake', description: 'Rich chocolate cake', price: 199, image: '/dessert.jpg' },
+    ],
+  },
+  {
+    id: 'sandwich',
+    name: 'Sandwich',
+    image: '/drinks.jpg',
+    items: [
+        { id: 's1', name: 'Club Sandwich', description: 'Loaded with veggies and ham', price: 249, image: '/sandwich.jpeg' },
+        { id: 's3', name: 'Club Sandwich', description: 'Loaded with veggies and ham', price: 149, image: '/sandwich.jpeg' },
+        { id: 's2', name: 'Veggie Delight', description: 'Fresh vegetable sandwich', price: 179, image: '/sandwich.jpeg' },
+    ]
+  },
+  {
+    id: 'paratha',
+    name: 'Paratha',
+    image: '/drinks.jpg',
+    items: [
+        { id: 'pr1', name: 'Aloo Paratha', description: 'With butter and pickle', price: 149, image: '/paratha.jpeg' },
+        { id: 'pr2', name: 'Gobi Paratha', description: 'With curd and chutney', price: 159, image: '/paratha.jpeg' },
+        { id: 'pr3', name: 'Gobi Paratha', description: 'With curd and chutney', price: 199, image: '/paratha.jpeg' },
+    ]
+  },
+    {
+    id: 'biryani',
+    name: 'Biryani',
+    image: '/pizza.jpeg',
+    items: [
+        { id: 'b1', name: 'Chicken Dum Biryani', description: 'Aromatic and flavorful', price: 349, image: '/biryani.jpeg' },
+        { id: 'b2', name: 'Veg Biryani', description: 'Mixed vegetable biryani', price: 279, image: '/biryani.jpeg' },
+        { id: 'b3', name: 'Veg Biryani', description: 'Mixed vegetable biryani', price: 479, image: '/biryani.jpeg' },
+    ]
+  },
+]
+
+function MenuUserPage() {
+  const [cart, setCart] = useState([])
+
+  const addToCart = (item) => {
+    setCart((prev) => {
+      const found = prev.find((i) => i.id === item.id)
+      if (found) {
+        return prev.map((i) => i.id === item.id ? { ...i, qty: i.qty + 1 } : i)
+      } else {
+        return [...prev, { ...item, qty: 1 }]
+      }
+    })
+  }
+
+  const removeFromCart = (itemId) => {
+    setCart((prev) => prev.filter((i) => i.id !== itemId))
+  }
+
+  const updateQty = (itemId, qty) => {
+    setCart((prev) => prev.map((i) => (i.id === itemId ? { ...i, qty: Math.max(0, qty) } : i)).filter(i => i.qty > 0))
+  }
+
+  const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0)
+
+  return (
+    <div className="min-h-screen bg-gray-50 font-sans">
+      <div className=" mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          {/* Menu Categories & Items */}
+          <div className="lg:col-span-2 space-y-10">
+            {DEMO_CATEGORIES.map((cat) => (
+              <div key={cat.id}>
+                <div className="flex items-center mb-6">
+                  <Image src={cat.image} alt={cat.name} width={48} height={48} className="rounded-full object-cover mr-4 border-2 border-white shadow-md" />
+                  <h2 className="text-3xl font-bold text-gray-800 tracking-tight">{cat.name}</h2>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+                  {cat.items.map((item) => (
+                    <div key={item.id} className="bg-white rounded-2xl shadow-lg overflow-hidden group transform hover:-translate-y-1 transition-all duration-300">
+                      <Image src={cat.image} alt={item.name} width={400} height={160} className="w-full h-40 object-cover" />
+                      <div className="p-5">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-1">{item.name}</h3>
+                        <p className="text-sm text-gray-500 mb-3 h-10">{item.description}</p>
+                        <div className="flex justify-between items-center">
+                          <div className="text-2xl text-orange-600 font-bold">₹{item.price}</div>
+                          <button onClick={() => addToCart(item)} className="p-2 rounded-full bg-orange-100 text-orange-600 hover:bg-orange-500 hover:text-white transition-colors duration-300 shadow-md">
+                            <FiPlus className="w-5 h-5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* Cart */}
+          <div className="bg-white rounded-2xl shadow-xl p-6 lg:p-8 sticky top-8 h-fit">
+            <div className="flex items-center gap-3 mb-6">
+              <FiShoppingCart className="w-8 h-8 text-orange-500" />
+              <h2 className="text-2xl font-bold text-gray-800">Your Order</h2>
+            </div>
+            {cart.length === 0 ? (
+              <div className="text-center text-gray-400 py-10">
+                <FiShoppingCart className="w-16 h-16 mx-auto mb-4" />
+                <p>Your cart is empty</p>
+                <p className="text-sm">Add items to get started!</p>
+              </div>
+            ) : (
+              <div className="space-y-5">
+                <div className="max-h-96 overflow-y-auto pr-2 space-y-4">
+                  {cart.map((item) => (
+                    <div key={item.id} className="flex items-center">
+                      <Image src={item.image} alt={item.name} width={64} height={64} className="w-16 h-16 rounded-lg border object-cover" />
+                      <div className="flex-1 ml-4">
+                        <div className="font-semibold text-gray-800">{item.name}</div>
+                        <div className="text-sm text-gray-500">₹{item.price}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button onClick={() => updateQty(item.id, item.qty - 1)} className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+                          {item.qty === 1 ? <FiTrash2 className="w-4 h-4 text-red-500" /> : <FiMinus className="w-4 h-4 text-gray-600" />}
+                        </button>
+                        <span className="w-8 text-center font-semibold">{item.qty}</span>
+                        <button onClick={() => updateQty(item.id, item.qty + 1)} className="p-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition">
+                          <FiPlus className="w-4 h-4 text-gray-600" />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="border-t-2 border-dashed pt-5 space-y-3">
+                  <div className="flex justify-between text-gray-600">
+                    <span>Subtotal</span>
+                    <span>₹{total.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between text-gray-600">
+                    <span>Taxes & Charges</span>
+                    <span>₹{(total * 0.05).toFixed(2)}</span>
+                  </div>
+                  <div className="border-t pt-4 mt-4 flex justify-between font-bold text-xl text-gray-900">
+                    <span>Total</span>
+                    <span>₹{(total * 1.05).toFixed(2)}</span>
+                  </div>
+                </div>
+                <button className="w-full mt-4 py-3 rounded-xl bg-orange-500 text-white font-semibold text-lg hover:bg-orange-600 transition shadow-lg hover:shadow-orange-300">
+                  Place Order
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function MenuPage() {
+  const { user } = useAuth()
+  if (user?.username === 'menuuser') {
+    return <MenuUserPage />
+  }
   return (
     <RoleGuard requiredPermission="menu">
       <MenuContent />
@@ -394,7 +579,7 @@ function MenuContent() {
       <div className="border-b border-gray-200">
         <nav className="flex -mb-px space-x-4 sm:space-x-8 overflow-x-auto">
           {tabs.map((tab) => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center px-1 py-4 text-sm font-medium border-b-2 whitespace-nowrap ${activeTab === tab.id ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center px-1 py-4 text-sm font-medium border-b-2 whitespace-nowrap ${activeTab === tab.id ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} cursor-pointer`}>
               <span className="mr-2">{tab.icon}</span>{tab.name}
             </button>
           ))}

@@ -105,7 +105,7 @@ function StaffContent() {
             </button>
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700">Username</label>
                 <input
@@ -216,7 +216,7 @@ function StaffContent() {
           </button>
         </div>
         <form className="space-y-6">
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700">Full Name</label>
               <input
@@ -468,19 +468,10 @@ function StaffContent() {
 
       {/* Tabs */}
       <div className="border-b border-gray-200">
-        <nav className="flex -mb-px space-x-8">
+        <nav className="flex -mb-px space-x-4 sm:space-x-8 overflow-x-auto">
           {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center px-1 py-4 text-sm font-medium border-b-2 ${
-                activeTab === tab.id
-                  ? 'border-orange-500 text-orange-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-              }`}
-            >
-              <span className="mr-2">{tab.icon}</span>
-              {tab.name}
+            <button key={tab.id} onClick={() => setActiveTab(tab.id)} className={`flex items-center px-1 py-4 text-sm font-medium border-b-2 whitespace-nowrap ${activeTab === tab.id ? 'border-orange-500 text-orange-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} cursor-pointer`}>
+              <span className="mr-2">{tab.icon}</span>{tab.name}
             </button>
           ))}
         </nav>
@@ -489,30 +480,30 @@ function StaffContent() {
       {/* Content based on active tab */}
       <div className="bg-white rounded-lg shadow">
         {activeTab === 'staff' && (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Staff Member
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Role
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Contact
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
@@ -525,24 +516,24 @@ function StaffContent() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">Manager</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">+91 98765 43210</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                       Active
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
@@ -555,24 +546,24 @@ function StaffContent() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">Cashier</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">+91 98765 43211</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                       Active
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center">
                       <div className="flex-shrink-0 h-10 w-10">
                         <div className="h-10 w-10 rounded-full bg-orange-100 flex items-center justify-center">
@@ -585,18 +576,18 @@ function StaffContent() {
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">Kitchen Staff</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">+91 98765 43212</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
                       On Leave
                     </span>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
@@ -607,26 +598,26 @@ function StaffContent() {
         )}
 
         {activeTab === 'receptionists' && (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Receptionist
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Contact Info
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Join Date
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Last Login
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -634,7 +625,7 @@ function StaffContent() {
               <tbody className="bg-white divide-y divide-gray-200">
                 {receptionists.map((receptionist) => (
                   <tr key={receptionist.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <div className="flex-shrink-0 h-10 w-10">
                           <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -649,11 +640,11 @@ function StaffContent() {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{receptionist.email}</div>
                       <div className="text-sm text-gray-500">{receptionist.phone}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
                         receptionist.status === 'Active' 
                           ? 'bg-green-100 text-green-800' 
@@ -662,13 +653,13 @@ function StaffContent() {
                         {receptionist.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {receptionist.joinDate}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {receptionist.lastLogin}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                       <button className="text-red-600 hover:text-red-900">Delete</button>
                     </td>
@@ -680,72 +671,72 @@ function StaffContent() {
         )}
 
         {activeTab === 'roles' && (
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
+          <div className="overflow-x-auto w-full">
+            <table className="min-w-full divide-y divide-gray-200 text-xs md:text-sm">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Role Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Description
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Staff Count
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-2 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">Manager</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 md:px-6 py-4">
                     <div className="text-sm text-gray-500">
                       Full access to all system features and staff management
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">2</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">Cashier</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 md:px-6 py-4">
                     <div className="text-sm text-gray-500">
                       Access to billing, customer management, and basic reports
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">3</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">Kitchen Staff</div>
                   </td>
-                  <td className="px-6 py-4">
+                  <td className="px-2 md:px-6 py-4">
                     <div className="text-sm text-gray-500">
                       Access to menu management and order processing
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">4</div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-2 md:px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button className="text-orange-600 hover:text-orange-900 mr-3">Edit</button>
                     <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
