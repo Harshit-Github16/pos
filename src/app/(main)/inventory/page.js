@@ -18,24 +18,6 @@ function InventoryContent() {
   const [showItemForm, setShowItemForm] = useState(false)
   const [showCategoryForm, setShowCategoryForm] = useState(false)
   const [showSupplierForm, setShowSupplierForm] = useState(false)
-  if (user?.username === 'menuuser') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You do not have access to this page.</p>
-        </div>
-      </div>
-    )
-  }
-
-  const tabs = [
-    { id: 'items', name: 'Items', icon: '📦' },
-    { id: 'categories', name: 'Categories', icon: '🗂️' },
-    { id: 'suppliers', name: 'Suppliers', icon: '🏢' },
-    { id: 'stock_alerts', name: 'Stock Alerts', icon: '⚠️' },
-  ]
-
   const [items, setItems] = useState([
     {
       id: 1,
@@ -122,6 +104,17 @@ function InventoryContent() {
       description: 'Mixed spices pack'
     }
   ])
+
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
   const categories = [
     { id: 'CAT001', name: 'Main Course', description: 'Curries and gravies.' },
     { id: 'CAT002', name: 'Rice', description: 'Rice-based dishes.' },

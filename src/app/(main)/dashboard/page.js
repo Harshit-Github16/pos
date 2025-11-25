@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useAuth } from '@/context/AuthContext'
 import RoleGuard from '@/components/RoleGuard'
 
@@ -17,10 +18,10 @@ function DashboardContent() {
     return (
       <div className="relative min-h-screen flex items-center justify-center bg-orange-50 overflow-hidden">
         <div className="absolute inset-0 opacity-20 z-0 flex items-center justify-center">
-          <img src="/public/globe.svg" alt="Food Background" className="w-full h-full object-cover" />
+          <Image src="/public/globe.svg" alt="Food Background" fill className="object-cover" />
         </div>
         <div className="relative z-10 flex flex-col items-center justify-center p-8 bg-white bg-opacity-80 rounded-xl shadow-lg">
-          <img src="/logo.png" alt="Logo" className="w-24 h-24 mb-4 rounded-full shadow" />
+          <Image src="/logo.png" alt="Logo" width={96} height={96} className="mb-4 rounded-full shadow" />
           <h1 className="text-3xl font-bold text-orange-700 mb-2">Welcome to Muneem Ji Restaurant</h1>
           <p className="text-lg text-gray-700 mb-6 font-semibold">Deliciousness Delivered</p>
           <button
@@ -58,7 +59,7 @@ function DashboardContent() {
   // Get role-specific quick actions
   const getQuickActions = () => {
     const actions = []
-    
+
     if (hasPermission('billing')) {
       actions.push({
         name: '🧾 New Order',
@@ -66,7 +67,7 @@ function DashboardContent() {
         bgColor: 'bg-orange-600 hover:bg-orange-700'
       })
     }
-    
+
     if (hasPermission('inventory')) {
       actions.push({
         name: '📦 Add Inventory',
@@ -74,7 +75,7 @@ function DashboardContent() {
         bgColor: 'bg-blue-600 hover:bg-blue-700'
       })
     }
-    
+
     if (hasPermission('reports')) {
       actions.push({
         name: '📊 View Reports',
@@ -82,7 +83,7 @@ function DashboardContent() {
         bgColor: 'bg-green-600 hover:bg-green-700'
       })
     }
-    
+
     if (hasPermission('menu')) {
       actions.push({
         name: '🍽️ Manage Menu',
@@ -90,7 +91,7 @@ function DashboardContent() {
         bgColor: 'bg-purple-600 hover:bg-purple-700'
       })
     }
-    
+
     return actions
   }
 
@@ -141,7 +142,7 @@ function DashboardContent() {
         ))}
       </div>
 
-    
+
 
       {/* Recent Orders */}
       <div className="bg-white shadow rounded-lg p-4 sm:p-6">

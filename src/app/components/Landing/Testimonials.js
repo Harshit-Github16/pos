@@ -1,4 +1,5 @@
 'use client';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaQuoteLeft, FaStar, FaChevronLeft, FaChevronRight } from 'react-icons/fa';
@@ -78,14 +79,16 @@ export default function Testimonials() {
                             >
                                 <FaQuoteLeft className="w-12 h-12 text-orange-200 mx-auto mb-6" />
                                 <p className="text-xl md:text-2xl font-medium text-gray-900 mb-8 leading-relaxed">
-                                    "{testimonials[currentIndex].content}"
+                                    &quot;{testimonials[currentIndex].content}&quot;
                                 </p>
 
                                 <div className="flex flex-col items-center">
-                                    <img
+                                    <Image
                                         src={testimonials[currentIndex].image}
                                         alt={testimonials[currentIndex].author}
-                                        className="w-16 h-16 rounded-full mb-4 border-2 border-orange-200"
+                                        width={64}
+                                        height={64}
+                                        className="rounded-full mb-4 border-2 border-orange-200"
                                     />
                                     <div className="font-bold text-gray-900 text-lg">{testimonials[currentIndex].author}</div>
                                     <div className="text-gray-600">{testimonials[currentIndex].role}</div>

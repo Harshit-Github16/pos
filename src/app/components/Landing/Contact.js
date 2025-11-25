@@ -14,9 +14,9 @@ export default function Contact() {
                         transition={{ duration: 0.8 }}
                         className="max-w-xl lg:max-w-lg"
                     >
-                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Let's talk about your business</h2>
+                        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Let&apos;s talk about your business</h2>
                         <p className="mt-4 text-lg leading-8 text-gray-600">
-                            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+                            Have questions? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
                         </p>
                         <dl className="mt-10 space-y-4 text-base leading-7 text-gray-600">
                             <div className="flex gap-x-4">

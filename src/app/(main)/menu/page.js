@@ -31,27 +31,27 @@ const CATEGORY_IMAGE = {
   Paratha: '/paratha.jpeg',
 }
 
+const DUMMY_MENU_ITEMS = [
+  { id: '1', name: 'Masala Chai', category: 'Beverages', price: 30, description: 'Spiced Indian tea brewed with milk and aromatic spices.' },
+  { id: '2', name: 'Cold Coffee', category: 'Beverages', price: 120, description: 'Chilled coffee blended with ice cream and chocolate syrup.' },
+  { id: '3', name: 'Mango Lassi', category: 'Beverages', price: 80, description: 'Refreshing yogurt-based drink with sweet mango pulp.' },
+  { id: '4', name: 'Paneer Tikka', category: 'Main Course', price: 280, description: 'Marinated cottage cheese cubes grilled to perfection.' },
+  { id: '5', name: 'Butter Chicken', category: 'Main Course', price: 350, description: 'Tender chicken cooked in a rich, creamy tomato gravy.' },
+  { id: '6', name: 'Dal Makhani', category: 'Main Course', price: 220, description: 'Slow-cooked black lentils with butter and cream.' },
+  { id: '7', name: 'Veg Biryani', category: 'Main Course', price: 250, description: 'Fragrant basmati rice cooked with mixed vegetables and spices.' },
+  { id: '8', name: 'Gulab Jamun', category: 'Dessert', price: 60, description: 'Soft milk solids dumplings soaked in sugar syrup.' },
+  { id: '9', name: 'Rasmalai', category: 'Dessert', price: 90, description: 'Soft paneer discs soaked in sweetened, thickened milk.' },
+  { id: '10', name: 'Veg Sandwich', category: 'Sandwich', price: 100, description: 'Grilled sandwich with fresh vegetables and cheese.' },
+  { id: '11', name: 'Chicken Sandwich', category: 'Sandwich', price: 150, description: 'Grilled sandwich with spiced chicken filling.' },
+  { id: '12', name: 'Margherita Pizza', category: 'Pizza', price: 299, description: 'Classic pizza with tomato sauce, mozzarella, and basil.' },
+  { id: '13', name: 'Farmhouse Pizza', category: 'Pizza', price: 399, description: 'Loaded with onions, capsicum, tomatoes, and mushrooms.' },
+  { id: '14', name: 'Aloo Paratha', category: 'Paratha', price: 80, description: 'Whole wheat flatbread stuffed with spiced mashed potatoes.' },
+  { id: '15', name: 'Paneer Paratha', category: 'Paratha', price: 100, description: 'Whole wheat flatbread stuffed with spiced cottage cheese.' },
+];
+
 function MenuUserPage() {
   const [cart, setCart] = useState([])
   const [categories, setCategories] = useState([])
-
-  const DUMMY_MENU_ITEMS = [
-    { id: '1', name: 'Masala Chai', category: 'Beverages', price: 30, description: 'Spiced Indian tea brewed with milk and aromatic spices.' },
-    { id: '2', name: 'Cold Coffee', category: 'Beverages', price: 120, description: 'Chilled coffee blended with ice cream and chocolate syrup.' },
-    { id: '3', name: 'Mango Lassi', category: 'Beverages', price: 80, description: 'Refreshing yogurt-based drink with sweet mango pulp.' },
-    { id: '4', name: 'Paneer Tikka', category: 'Main Course', price: 280, description: 'Marinated cottage cheese cubes grilled to perfection.' },
-    { id: '5', name: 'Butter Chicken', category: 'Main Course', price: 350, description: 'Tender chicken cooked in a rich, creamy tomato gravy.' },
-    { id: '6', name: 'Dal Makhani', category: 'Main Course', price: 220, description: 'Slow-cooked black lentils with butter and cream.' },
-    { id: '7', name: 'Veg Biryani', category: 'Main Course', price: 250, description: 'Fragrant basmati rice cooked with mixed vegetables and spices.' },
-    { id: '8', name: 'Gulab Jamun', category: 'Dessert', price: 60, description: 'Soft milk solids dumplings soaked in sugar syrup.' },
-    { id: '9', name: 'Rasmalai', category: 'Dessert', price: 90, description: 'Soft paneer discs soaked in sweetened, thickened milk.' },
-    { id: '10', name: 'Veg Sandwich', category: 'Sandwich', price: 100, description: 'Grilled sandwich with fresh vegetables and cheese.' },
-    { id: '11', name: 'Chicken Sandwich', category: 'Sandwich', price: 150, description: 'Grilled sandwich with spiced chicken filling.' },
-    { id: '12', name: 'Margherita Pizza', category: 'Pizza', price: 299, description: 'Classic pizza with tomato sauce, mozzarella, and basil.' },
-    { id: '13', name: 'Farmhouse Pizza', category: 'Pizza', price: 399, description: 'Loaded with onions, capsicum, tomatoes, and mushrooms.' },
-    { id: '14', name: 'Aloo Paratha', category: 'Paratha', price: 80, description: 'Whole wheat flatbread stuffed with spiced mashed potatoes.' },
-    { id: '15', name: 'Paneer Paratha', category: 'Paratha', price: 100, description: 'Whole wheat flatbread stuffed with spiced cottage cheese.' },
-  ];
 
   useEffect(() => {
     const load = async () => {
