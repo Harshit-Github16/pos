@@ -5,7 +5,7 @@ export function middleware(request) {
   const path = request.nextUrl.pathname
 
   // Define public paths that don't require authentication
-  const isPublicPath = path === '/login'
+  const isPublicPath = path === '/login' || path === '/'
 
   // Get the token from the cookies
   const token = request.cookies.get('muneem_user')?.value || ''

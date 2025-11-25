@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import RoleGuard from '@/components/RoleGuard'
 import { useAuth } from '@/context/AuthContext'
 import { FiShoppingCart, FiPlus, FiMinus, FiTrash2 } from 'react-icons/fi'
@@ -23,71 +23,65 @@ function DeleteIcon() {
   )
 }
 
-const DEMO_CATEGORIES = [
-  {
-    id: 'pizza',
-    name: 'Pizza',
-    image: '/pizza.jpeg',
-    items: [
-      { id: 'p1', name: 'Margherita', description: 'Classic cheese & tomato', price: 299, image: '/pizza.jpeg' },
-      { id: 'p2', name: 'Farmhouse', description: 'Veggies & cheese', price: 399, image: '/pizza.jpeg' },
-      { id: 'p3', name: 'Peppy Paneer', description: 'Spicy paneer & capsicum', price: 349, image: '/pizza.jpeg' },
-    ],
-  },
-  {
-    id: 'drinks',
-    name: 'Drinks',
-    image: '/drinks.jpg',
-    items: [
-      { id: 'd1', name: 'Red Cooler', description: 'Chilled berry drink', price: 129, image: '/drinks.jpg' },
-      { id: 'd2', name: 'Iced Tea', description: 'Refreshing lemon iced tea', price: 99, image: '/drinks.jpg' },
-      { id: 'd3', name: 'Lassi', description: 'Cool yogurt drink', price: 79, image: '/drinks.jpg' },
-    ],
-  },
-  {
-    id: 'dessert',
-    name: 'Dessert',
-    image: '/dessert.jpg',
-    items: [
-      { id: 'a3', name: 'Cookie Skillet', description: 'Warm cookie with ice cream', price: 249, image: '/dessert.jpg' },
-      { id: 'a2', name: 'Choco Lava Cake', description: 'Rich chocolate cake', price: 129, image: '/dessert.jpg' },
-      { id: 'a1', name: 'Choco Lava Cake', description: 'Rich chocolate cake', price: 199, image: '/dessert.jpg' },
-    ],
-  },
-  {
-    id: 'sandwich',
-    name: 'Sandwich',
-    image: '/drinks.jpg',
-    items: [
-        { id: 's1', name: 'Club Sandwich', description: 'Loaded with veggies and ham', price: 249, image: '/sandwich.jpeg' },
-        { id: 's3', name: 'Club Sandwich', description: 'Loaded with veggies and ham', price: 149, image: '/sandwich.jpeg' },
-        { id: 's2', name: 'Veggie Delight', description: 'Fresh vegetable sandwich', price: 179, image: '/sandwich.jpeg' },
-    ]
-  },
-  {
-    id: 'paratha',
-    name: 'Paratha',
-    image: '/drinks.jpg',
-    items: [
-        { id: 'pr1', name: 'Aloo Paratha', description: 'With butter and pickle', price: 149, image: '/paratha.jpeg' },
-        { id: 'pr2', name: 'Gobi Paratha', description: 'With curd and chutney', price: 159, image: '/paratha.jpeg' },
-        { id: 'pr3', name: 'Gobi Paratha', description: 'With curd and chutney', price: 199, image: '/paratha.jpeg' },
-    ]
-  },
-    {
-    id: 'biryani',
-    name: 'Biryani',
-    image: '/pizza.jpeg',
-    items: [
-        { id: 'b1', name: 'Chicken Dum Biryani', description: 'Aromatic and flavorful', price: 349, image: '/biryani.jpeg' },
-        { id: 'b2', name: 'Veg Biryani', description: 'Mixed vegetable biryani', price: 279, image: '/biryani.jpeg' },
-        { id: 'b3', name: 'Veg Biryani', description: 'Mixed vegetable biryani', price: 479, image: '/biryani.jpeg' },
-    ]
-  },
-]
+const CATEGORY_IMAGE = {
+  Beverages: '/drinks.jpg',
+  Dessert: '/dessert.jpg',
+  Sandwich: '/sandwich.jpeg',
+  Pizza: '/pizza.jpeg',
+  Paratha: '/paratha.jpeg',
+}
 
 function MenuUserPage() {
   const [cart, setCart] = useState([])
+  const [categories, setCategories] = useState([])
+
+  const DUMMY_MENU_ITEMS = [
+    { id: '1', name: 'Masala Chai', category: 'Beverages', price: 30, description: 'Spiced Indian tea brewed with milk and aromatic spices.' },
+    { id: '2', name: 'Cold Coffee', category: 'Beverages', price: 120, description: 'Chilled coffee blended with ice cream and chocolate syrup.' },
+    { id: '3', name: 'Mango Lassi', category: 'Beverages', price: 80, description: 'Refreshing yogurt-based drink with sweet mango pulp.' },
+    { id: '4', name: 'Paneer Tikka', category: 'Main Course', price: 280, description: 'Marinated cottage cheese cubes grilled to perfection.' },
+    { id: '5', name: 'Butter Chicken', category: 'Main Course', price: 350, description: 'Tender chicken cooked in a rich, creamy tomato gravy.' },
+    { id: '6', name: 'Dal Makhani', category: 'Main Course', price: 220, description: 'Slow-cooked black lentils with butter and cream.' },
+    { id: '7', name: 'Veg Biryani', category: 'Main Course', price: 250, description: 'Fragrant basmati rice cooked with mixed vegetables and spices.' },
+    { id: '8', name: 'Gulab Jamun', category: 'Dessert', price: 60, description: 'Soft milk solids dumplings soaked in sugar syrup.' },
+    { id: '9', name: 'Rasmalai', category: 'Dessert', price: 90, description: 'Soft paneer discs soaked in sweetened, thickened milk.' },
+    { id: '10', name: 'Veg Sandwich', category: 'Sandwich', price: 100, description: 'Grilled sandwich with fresh vegetables and cheese.' },
+    { id: '11', name: 'Chicken Sandwich', category: 'Sandwich', price: 150, description: 'Grilled sandwich with spiced chicken filling.' },
+    { id: '12', name: 'Margherita Pizza', category: 'Pizza', price: 299, description: 'Classic pizza with tomato sauce, mozzarella, and basil.' },
+    { id: '13', name: 'Farmhouse Pizza', category: 'Pizza', price: 399, description: 'Loaded with onions, capsicum, tomatoes, and mushrooms.' },
+    { id: '14', name: 'Aloo Paratha', category: 'Paratha', price: 80, description: 'Whole wheat flatbread stuffed with spiced mashed potatoes.' },
+    { id: '15', name: 'Paneer Paratha', category: 'Paratha', price: 100, description: 'Whole wheat flatbread stuffed with spiced cottage cheese.' },
+  ];
+
+  useEffect(() => {
+    const load = async () => {
+      // const res = await fetch('/api/menu', { cache: 'no-store' })
+      // const json = await res.json()
+      // const items = json?.data || []
+      const items = DUMMY_MENU_ITEMS; // Use dummy data
+
+      const grouped = items.reduce((acc, it) => {
+        const key = it.category || 'Others'
+        if (!acc[key]) acc[key] = []
+        acc[key].push(it)
+        return acc
+      }, {})
+      const arr = Object.entries(grouped).map(([name, list]) => ({
+        id: name.toLowerCase().replace(/\s+/g, '-'),
+        name,
+        image: CATEGORY_IMAGE[name] || '/drinks.jpg',
+        items: list.map((it) => ({
+          id: it.id,
+          name: it.name,
+          description: it.description,
+          price: Number(it.price),
+          image: CATEGORY_IMAGE[name] || '/drinks.jpg',
+        })),
+      }))
+      setCategories(arr)
+    }
+    load()
+  }, [])
 
   const addToCart = (item) => {
     setCart((prev) => {
@@ -116,7 +110,7 @@ function MenuUserPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           {/* Menu Categories & Items */}
           <div className="lg:col-span-2 space-y-10">
-            {DEMO_CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <div key={cat.id}>
                 <div className="flex items-center mb-6">
                   <Image src={cat.image} alt={cat.name} width={48} height={48} className="rounded-full object-cover mr-4 border-2 border-white shadow-md" />

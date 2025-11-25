@@ -36,14 +36,92 @@ function InventoryContent() {
     { id: 'stock_alerts', name: 'Stock Alerts', icon: '⚠️' },
   ]
 
-  // Dummy data
-  const items = [
-    { id: 'ITM001', name: 'Butter Chicken', category: 'Main Course', sku: 'BC-001', unit: 'Plate', purchasePrice: 250, sellingPrice: 450, stock: 20, minStock: 5, description: 'Rich creamy chicken curry.' },
-    { id: 'ITM002', name: 'Paneer Butter Masala', category: 'Main Course', sku: 'PBM-002', unit: 'Plate', purchasePrice: 180, sellingPrice: 350, stock: 12, minStock: 4, description: 'Paneer in buttery tomato gravy.' },
-    { id: 'ITM003', name: 'Veg Biryani', category: 'Rice', sku: 'VB-003', unit: 'Plate', purchasePrice: 100, sellingPrice: 250, stock: 8, minStock: 3, description: 'Aromatic rice with veggies.' },
-    { id: 'ITM004', name: 'Butter Naan', category: 'Breads', sku: 'BN-004', unit: 'Piece', purchasePrice: 15, sellingPrice: 50, stock: 40, minStock: 10, description: 'Soft naan with butter.' },
-    { id: 'ITM005', name: 'Masala Chai', category: 'Beverages', sku: 'MC-005', unit: 'Cup', purchasePrice: 8, sellingPrice: 30, stock: 60, minStock: 15, description: 'Spiced Indian tea.' },
-  ]
+  const [items, setItems] = useState([
+    {
+      id: 1,
+      name: 'Basmati Rice',
+      category: 'Rice',
+      sku: 'RICE001',
+      unit: 'kg',
+      purchasePrice: 80,
+      sellingPrice: 120,
+      stock: 50,
+      minStock: 10,
+      description: 'Premium long grain basmati rice'
+    },
+    {
+      id: 2,
+      name: 'Chicken Breast',
+      category: 'Meat',
+      sku: 'MEAT001',
+      unit: 'kg',
+      purchasePrice: 200,
+      sellingPrice: 350,
+      stock: 20,
+      minStock: 5,
+      description: 'Fresh boneless chicken breast'
+    },
+    {
+      id: 3,
+      name: 'Paneer',
+      category: 'Dairy',
+      sku: 'DAIRY001',
+      unit: 'kg',
+      purchasePrice: 250,
+      sellingPrice: 400,
+      stock: 15,
+      minStock: 5,
+      description: 'Fresh cottage cheese'
+    },
+    {
+      id: 4,
+      name: 'Tomato',
+      category: 'Vegetables',
+      sku: 'VEG001',
+      unit: 'kg',
+      purchasePrice: 30,
+      sellingPrice: 60,
+      stock: 40,
+      minStock: 10,
+      description: 'Fresh red tomatoes'
+    },
+    {
+      id: 5,
+      name: 'Cooking Oil',
+      category: 'Grocery',
+      sku: 'GROC001',
+      unit: 'liter',
+      purchasePrice: 120,
+      sellingPrice: 180,
+      stock: 30,
+      minStock: 10,
+      description: 'Refined sunflower oil'
+    },
+    {
+      id: 6,
+      name: 'Coca Cola',
+      category: 'Beverages',
+      sku: 'BEV001',
+      unit: 'piece',
+      purchasePrice: 35,
+      sellingPrice: 50,
+      stock: 100,
+      minStock: 20,
+      description: '300ml can'
+    },
+    {
+      id: 7,
+      name: 'Masala Spices',
+      category: 'Grocery',
+      sku: 'SPICE001',
+      unit: 'kg',
+      purchasePrice: 500,
+      sellingPrice: 800,
+      stock: 5,
+      minStock: 2,
+      description: 'Mixed spices pack'
+    }
+  ])
   const categories = [
     { id: 'CAT001', name: 'Main Course', description: 'Curries and gravies.' },
     { id: 'CAT002', name: 'Rice', description: 'Rice-based dishes.' },

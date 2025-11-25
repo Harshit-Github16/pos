@@ -1,0 +1,78 @@
+// Prisma schema for POS system
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model MenuItem {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  price       Decimal
+  category    String
+  imageUrl    String?
+  isAvailable Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  orderItems  OrderItem[]
+}
+
+model InventoryItem {
+  id             Int       @id @default(autoincrement())
+  name           String
+  sku            String    @unique
+  quantity       Int       @default(0)
+  unit           String
+  reorderLevel   Int       @default(0)
+  costPrice      Decimal
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Staff {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String   @unique
+  role       String
+  active     Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  orders     Order[]
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  orderNumber   String      @unique
+  status        String      @default("PENDING")
+  totalAmount   Decimal
+  paymentMethod String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  staffId       Int?
+  staff         Staff?      @relation(fields: [staffId], references: [id])
+  items         OrderItem[]
+}
+
+model OrderItem {
+  id         Int       @id @default(autoincrement())
+  orderId    Int
+  menuItemId Int
+  quantity   Int       @default(1)
+  unitPrice  Decimal
+  subtotal   Decimal
+  order      Order     @relation(fields: [orderId], references: [id])
+  menuItem   MenuItem  @relation(fields: [menuItemId], references: [id])
+}
+
+model Setting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String
+  updatedAt DateTime @updatedAt
+}
+
+
