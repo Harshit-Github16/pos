@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { FaBox, FaTags, FaTruck, FaExclamationTriangle } from 'react-icons/fa'
 import RoleGuard from '@/components/RoleGuard'
 import { useAuth } from '@/context/AuthContext'
 
@@ -124,6 +125,13 @@ function InventoryContent() {
   const suppliers = [
     { id: 'SUP001', name: 'Fresh Foods Ltd.', contact: 'Amit Verma', phone: '+91 98765 43210', email: 'amit@freshfoods.com', address: '123 Market Road, Delhi', paymentTerms: 'Net 30', taxId: 'GSTIN12345' },
     { id: 'SUP002', name: 'Dairy Best', contact: 'Sunita Rao', phone: '+91 98765 43211', email: 'sunita@dairybest.com', address: '45 Milk Lane, Mumbai', paymentTerms: 'Net 15', taxId: 'GSTIN67890' },
+  ]
+
+  const tabs = [
+    { id: 'items', name: 'Items', icon: <FaBox /> },
+    { id: 'categories', name: 'Categories', icon: <FaTags /> },
+    { id: 'suppliers', name: 'Suppliers', icon: <FaTruck /> },
+    { id: 'stock_alerts', name: 'Stock Alerts', icon: <FaExclamationTriangle /> },
   ]
 
   const AddItemForm = () => (
