@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { FaBox, FaTags, FaTruck, FaExclamationTriangle } from 'react-icons/fa'
 import RoleGuard from '@/components/RoleGuard'
 import { useAuth } from '@/context/AuthContext'
 
@@ -105,6 +106,25 @@ function InventoryContent() {
     }
   ])
 
+  const categories = [
+    { id: 'CAT001', name: 'Main Course', description: 'Curries and gravies.' },
+    { id: 'CAT002', name: 'Rice', description: 'Rice-based dishes.' },
+    { id: 'CAT003', name: 'Breads', description: 'Indian breads.' },
+    { id: 'CAT004', name: 'Beverages', description: 'Drinks and refreshments.' },
+  ]
+
+  const suppliers = [
+    { id: 'SUP001', name: 'Fresh Foods Ltd.', contact: 'Amit Verma', phone: '+91 98765 43210', email: 'amit@freshfoods.com', address: '123 Market Road, Delhi', paymentTerms: 'Net 30', taxId: 'GSTIN12345' },
+    { id: 'SUP002', name: 'Dairy Best', contact: 'Sunita Rao', phone: '+91 98765 43211', email: 'sunita@dairybest.com', address: '45 Milk Lane, Mumbai', paymentTerms: 'Net 15', taxId: 'GSTIN67890' },
+  ]
+
+  const tabs = [
+    { id: 'items', name: 'Items', icon: <FaBox /> },
+    { id: 'categories', name: 'Categories', icon: <FaTags /> },
+    { id: 'suppliers', name: 'Suppliers', icon: <FaTruck /> },
+    { id: 'stock_alerts', name: 'Stock Alerts', icon: <FaExclamationTriangle /> },
+  ]
+
   if (user?.username === 'menuuser') {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -115,16 +135,6 @@ function InventoryContent() {
       </div>
     )
   }
-  const categories = [
-    { id: 'CAT001', name: 'Main Course', description: 'Curries and gravies.' },
-    { id: 'CAT002', name: 'Rice', description: 'Rice-based dishes.' },
-    { id: 'CAT003', name: 'Breads', description: 'Indian breads.' },
-    { id: 'CAT004', name: 'Beverages', description: 'Drinks and refreshments.' },
-  ]
-  const suppliers = [
-    { id: 'SUP001', name: 'Fresh Foods Ltd.', contact: 'Amit Verma', phone: '+91 98765 43210', email: 'amit@freshfoods.com', address: '123 Market Road, Delhi', paymentTerms: 'Net 30', taxId: 'GSTIN12345' },
-    { id: 'SUP002', name: 'Dairy Best', contact: 'Sunita Rao', phone: '+91 98765 43211', email: 'sunita@dairybest.com', address: '45 Milk Lane, Mumbai', paymentTerms: 'Net 15', taxId: 'GSTIN67890' },
-  ]
 
   const AddItemForm = () => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
