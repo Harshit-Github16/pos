@@ -106,16 +106,6 @@ function InventoryContent() {
     }
   ])
 
-  if (user?.username === 'menuuser') {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
-          <p className="text-gray-600">You do not have access to this page.</p>
-        </div>
-      </div>
-    )
-  }
   const categories = [
     { id: 'CAT001', name: 'Main Course', description: 'Curries and gravies.' },
     { id: 'CAT002', name: 'Rice', description: 'Rice-based dishes.' },
@@ -133,6 +123,17 @@ function InventoryContent() {
     { id: 'suppliers', name: 'Suppliers', icon: <FaTruck /> },
     { id: 'stock_alerts', name: 'Stock Alerts', icon: <FaExclamationTriangle /> },
   ]
+
+  if (user?.username === 'menuuser') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+          <p className="text-gray-600">You do not have access to this page.</p>
+        </div>
+      </div>
+    )
+  }
 
   const AddItemForm = () => (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 z-50">
